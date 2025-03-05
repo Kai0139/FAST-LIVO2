@@ -799,15 +799,16 @@ void LIVMapper::imu_cbk(const sensor_msgs::Imu::ConstPtr &msg_in)
   sig_buffer.notify_all();
 }
 
-cv::Mat LIVMapper::getImageFromMsg(const sensor_msgs::ImageConstPtr &img_msg)
+cv::Mat LIVMapper::getImageFromMsg(const sensor_msgs::ImagePtr &img_msg)
 {
   cv::Mat img;
+  img_msg->step = img_msg->width * 3;
   img = cv_bridge::toCvCopy(img_msg, "bgr8")->image;
   return img;
 }
 
 // static int i = 0;
-void LIVMapper::img_cbk(const sensor_msgs::ImageConstPtr &msg_in)
+void LIVMapper::img_cbk(const sensor_msgs::ImagePtr &msg_in)
 {
   if (!img_en) return;
   sensor_msgs::Image::Ptr msg(new sensor_msgs::Image(*msg_in));
